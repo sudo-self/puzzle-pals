@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./animations.css";
 
-
 interface Tile {
   id: number;
   content: string;
@@ -25,7 +24,7 @@ const MemoryTileGame = () => {
 
   const audioMatch = new Audio("./bong.mp3");
   const audioFlip = new Audio(
-    "https://www.myinstants.com/media/sounds/flip.mp3"
+    "https://www.myinstants.com/media/sounds/flip.mp3",
   );
   const audioWin = new Audio("./bell.mp3");
   const audioFail = new Audio("./fail.mp3");
@@ -33,8 +32,6 @@ const MemoryTileGame = () => {
   const audioGameMusic = new Audio("./lobby.mp3");
   const audioPunch = new Audio("./punch.mp3"); //
 
-
-  
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
     return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
@@ -113,8 +110,8 @@ const MemoryTileGame = () => {
 
     setTiles(
       tiles.map((tile, i) =>
-        i === index ? { ...tile, isFlipped: true } : tile
-      )
+        i === index ? { ...tile, isFlipped: true } : tile,
+      ),
     );
 
     if (newFlipped.length === 2) {
@@ -133,21 +130,19 @@ const MemoryTileGame = () => {
       const newTiles = tiles.map((tile, i) =>
         i === i1 || i === i2
           ? { ...tile, isMatched: true, animate: true }
-          : tile
+          : tile,
       );
       setTiles(newTiles);
 
       setTimeout(() => {
-        setTiles((prev) =>
-          prev.map((tile) => ({ ...tile, animate: false }))
-        );
+        setTiles((prev) => prev.map((tile) => ({ ...tile, animate: false })));
       }, 750);
     } else {
       audioFail.play();
       setTiles(
         tiles.map((tile, i) =>
-          i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile
-        )
+          i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile,
+        ),
       );
     }
     setFlippedTiles([]);
@@ -170,7 +165,7 @@ const MemoryTileGame = () => {
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
-      })
+      }),
     )
       .then((images) => setCustomImages((prev) => [...prev, ...images]))
       .catch(console.error);
@@ -255,19 +250,17 @@ const MemoryTileGame = () => {
               />
             ))}
           </div>
-<button
-  onClick={() => {
-    audioPunch.play(); // Play punch sound
-    setShowSplash(false); // Hide splash screen
-  }}
-  className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg"
->
-  Start Game
-</button>
+          <button
+            onClick={() => {
+              audioPunch.play(); // Play punch sound
+              setShowSplash(false); // Hide splash screen
+            }}
+            className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg"
+          >
+            Start Game
+          </button>
 
-
-            <i>Data of any kind is not saved by this app</i>
-          </p>
+          <i>Data of any kind is not saved by this app</i>
         </div>
       ) : (
         <div className="w-full max-w-5xl flex flex-col items-center relative">
@@ -285,7 +278,7 @@ const MemoryTileGame = () => {
                     fontSize: `${Math.random() * 10 + 15}px`, // Random font size for variety
                   }}
                 >
-                                              🏆
+                  🏆
                 </div>
               ))}
             </div>
