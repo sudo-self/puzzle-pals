@@ -315,7 +315,7 @@ const MemoryTileGame = () => {
                   }`}
                 >
                   <div className="tile-face tile-front border border-gray-300 bg-white">
-                    <span className="text-2xl text-gray-600">❓</span>
+                    <span className="text-2xl text-gray-600">🔍</span>
                   </div>
                   <div className="tile-face tile-back">
                     <img
