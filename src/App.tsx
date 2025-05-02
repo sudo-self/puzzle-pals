@@ -30,7 +30,7 @@ const MemoryTileGame = () => {
   const audioWin = new Audio("./bell.mp3");
   const audioFail = new Audio("./fail.mp3");
   const audioRumble = new Audio("./win.mp3");
-  const audioGameMusic = new Audio("./game.mp3");
+  const audioGameMusic = new Audio("./lobby.mp3");
 
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
@@ -185,7 +185,7 @@ const MemoryTileGame = () => {
     setPlayerName(e.target.value);
   };
 
-  const audioStart = new Audio("./start.mp3");
+  const audioStart = new Audio("./lobby.mp3");
 
   const handleStartGame = () => {
     audioStart.play();
