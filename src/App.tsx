@@ -21,6 +21,8 @@ const MemoryTileGame = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [playerName, setPlayerName] = useState("");
+  const [level, setLevel] = useState(1);
+
 
   const audioMatch = new Audio("./bong.mp3");
   const audioFlip = new Audio(
@@ -47,7 +49,8 @@ const MemoryTileGame = () => {
   }, [generateAvatar]);
 
   const initializeGame = useCallback(() => {
-    const numPairs = 6;
+  const numPairs = level === 1 ? 6 : 9;
+
     let imagePool: string[];
 
     if (customImages.length >= numPairs) {
@@ -87,7 +90,9 @@ const MemoryTileGame = () => {
   }, [initializeGame, showSplash]);
 
   useEffect(() => {
-    if (matches === 6) {
+   const pairsToMatch = level === 1 ? 6 : 9;
+if (matches === pairsToMatch) {
+
       setGameOver(true);
       audioWin.play();
       setShowConfetti(true);
@@ -118,6 +123,19 @@ const MemoryTileGame = () => {
       setTimeout(() => checkForMatch(newFlipped[0], newFlipped[1]), 800);
     }
   };
+
+    
+  if (level === 1) {
+  setTimeout(() => {
+    setLevel(2);
+    initializeGame();
+  }, 2000);
+} else {
+  setGameOver(true);
+  audioWin.play();
+  setShowConfetti(true);
+  setTimeout(() => setShowConfetti(false), 5000);
+}
 
   const checkForMatch = (i1: number, i2: number) => {
     if (tiles[i1].content === tiles[i2].content) {
@@ -192,6 +210,8 @@ const MemoryTileGame = () => {
     audioGameMusic.play();
     setShowSplash(false);
   };
+
+
 
   return (
     <div
