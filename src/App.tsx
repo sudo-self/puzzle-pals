@@ -276,7 +276,7 @@ const MemoryTileGame = () => {
                     fontSize: `${Math.random() * 10 + 15}px`, 
                   }}
                 >
-                  🎉
+                  ⭐
                 </div>
               ))}
             </div>
