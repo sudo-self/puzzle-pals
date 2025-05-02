@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./animations.css";
 
+
 interface Tile {
   id: number;
   content: string;
@@ -28,12 +29,8 @@ const MemoryTileGame = () => {
   );
   const audioWin = new Audio("./bell.mp3");
   const audioFail = new Audio("./fail.mp3");
-  const audioRumble = new Audio("./wee.mp3");
+  const audioRumble = new Audio("./win.mp3");
   const audioGameMusic = new Audio("./game.mp3");
-
-  const splashMusic = new Audio("./splash.mp3");
-splashMusic.loop = true;
-
 
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
@@ -99,16 +96,6 @@ splashMusic.loop = true;
     }
   }, [matches]);
 
-  useEffect(() => {
-  if (showSplash) {
-    splashMusic.play().catch(console.error);
-  } else {
-    splashMusic.pause();
-    splashMusic.currentTime = 0;
-  }
-}, [showSplash]);
-
-
   const handleTileClick = (index: number) => {
     if (
       flippedTiles.length === 2 ||
@@ -136,7 +123,7 @@ splashMusic.loop = true;
   const checkForMatch = (i1: number, i2: number) => {
     if (tiles[i1].content === tiles[i2].content) {
       audioMatch.play();
-      audioRumble.play(); 
+      audioRumble.play(); // Play the rumble sound on a match
       setMatches((m) => m + 1);
 
       const newTiles = tiles.map((tile, i) =>
@@ -226,7 +213,7 @@ splashMusic.loop = true;
     >
       {showSplash ? (
         <div className="text-center p-8 space-y-6 max-w-lg w-full bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg">
-          <p>puzzle-pals.vercel.app</p>
+          <p>puzzle.JesseJesse.com</p>
           <p className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg">
             Welcome to Puzzle Pals!
           </p>
@@ -239,12 +226,12 @@ splashMusic.loop = true;
             type="text"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Puzzle Pal Player"
+            placeholder="Player Name (optional)"
             className="mt-2 p-2 w-full border rounded-md shadow-sm"
           />
           <div className="relative mt-4">
             <button className="neumorphic-button w-full px-4 py-2 rounded-lg bg-white shadow-md border">
-              + Create Custom Game
+              + Add images
             </button>
             <input
               type="file"
@@ -271,7 +258,7 @@ splashMusic.loop = true;
             Start Game
           </button>
           <p>
-            <i>data of ANY kind is not saved by this app</i>
+            <i>Data of any kind is not saved by this app</i>
           </p>
         </div>
       ) : (
@@ -287,10 +274,10 @@ splashMusic.loop = true;
                     animationDelay: `${Math.random() * 5}s`,
                     animationName: "fall",
                     animationDuration: `${Math.random() * 2 + 3}s`,
-                    fontSize: `${Math.random() * 10 + 15}px`, 
+                    fontSize: `${Math.random() * 10 + 15}px`, // Random font size for variety
                   }}
                 >
-                  ⭐
+                                              🏆
                 </div>
               ))}
             </div>
@@ -304,7 +291,7 @@ splashMusic.loop = true;
           )}
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Matches: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
@@ -328,14 +315,14 @@ splashMusic.loop = true;
                     tile.isFlipped || tile.isMatched ? "tile-flipped" : ""
                   }`}
                 >
-                  <div className="tile-face tile-front border border-gray-300 bg-blue-200">
-                    <span className="text-2xl text-gray-600"></span>
+                  <div className="tile-face tile-front border border-gray-300 bg-white">
+                    <span className="text-2xl text-gray-600">🔍</span>
                   </div>
-                  <div className="tile-face tile-back">
+                  <div className="tile-face tile-back flex items-center justify-center">
                     <img
                       src={tile.content}
-                      alt={`Tile ${tile.id}`}
-                      className="w-full h-full object-cover"
+                      alt="Tile Content"
+                      className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
                 </div>
@@ -349,7 +336,6 @@ splashMusic.loop = true;
 };
 
 export default MemoryTileGame;
-
 
 
 
