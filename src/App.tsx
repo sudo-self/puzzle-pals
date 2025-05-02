@@ -259,8 +259,7 @@ const MemoryTileGame = () => {
           >
             Start Game
           </button>
-
-          <i>Data of any kind is not saved by this app</i>
+         <p><i>Data of any kind is not saved by this app</i></p>
         </div>
       ) : (
         <div className="w-full max-w-5xl flex flex-col items-center relative">
