@@ -24,13 +24,12 @@ const MemoryTileGame = () => {
 
   const audioMatch = new Audio("./bong.mp3");
   const audioFlip = new Audio(
-    "https://www.myinstants.com/media/sounds/flip.mp3",
+    "https://www.myinstants.com/media/sounds/flip.mp3"
   );
   const audioWin = new Audio("./bell.mp3");
   const audioFail = new Audio("./fail.mp3");
   const audioRumble = new Audio("./wee.mp3");
   const audioGameMusic = new Audio("./game.mp3");
-
 
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
@@ -110,8 +109,8 @@ const MemoryTileGame = () => {
 
     setTiles(
       tiles.map((tile, i) =>
-        i === index ? { ...tile, isFlipped: true } : tile,
-      ),
+        i === index ? { ...tile, isFlipped: true } : tile
+      )
     );
 
     if (newFlipped.length === 2) {
@@ -119,34 +118,35 @@ const MemoryTileGame = () => {
       setTimeout(() => checkForMatch(newFlipped[0], newFlipped[1]), 800);
     }
   };
-    
-    const checkForMatch = (i1: number, i2: number) => {
-      if (tiles[i1].content === tiles[i2].content) {
-        audioMatch.play();
-        audioRumble.play();  // Play the rumble sound on a match
-        setMatches((m) => m + 1);
 
-        const newTiles = tiles.map((tile, i) =>
-          i === i1 || i === i2
-            ? { ...tile, isMatched: true, animate: true }
-            : tile,
+  const checkForMatch = (i1: number, i2: number) => {
+    if (tiles[i1].content === tiles[i2].content) {
+      audioMatch.play();
+      audioRumble.play(); // Play the rumble sound on a match
+      setMatches((m) => m + 1);
+
+      const newTiles = tiles.map((tile, i) =>
+        i === i1 || i === i2
+          ? { ...tile, isMatched: true, animate: true }
+          : tile
+      );
+      setTiles(newTiles);
+
+      setTimeout(() => {
+        setTiles((prev) =>
+          prev.map((tile) => ({ ...tile, animate: false }))
         );
-        setTiles(newTiles);
-
-        setTimeout(() => {
-          setTiles((prev) => prev.map((tile) => ({ ...tile, animate: false })));
-        }, 750);
-      } else {
-        audioFail.play();
-        setTiles(
-          tiles.map((tile, i) =>
-            i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile,
-          ),
-        );
-      }
-      setFlippedTiles([]);
-    };
-
+      }, 750);
+    } else {
+      audioFail.play();
+      setTiles(
+        tiles.map((tile, i) =>
+          i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile
+        )
+      );
+    }
+    setFlippedTiles([]);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -165,7 +165,7 @@ const MemoryTileGame = () => {
           reader.onerror = reject;
           reader.readAsDataURL(file);
         });
-      }),
+      })
     )
       .then((images) => setCustomImages((prev) => [...prev, ...images]))
       .catch(console.error);
@@ -184,20 +184,22 @@ const MemoryTileGame = () => {
     setPlayerName(e.target.value);
   };
 
-    const audioStart = new Audio("./start.mp3");
-    
-    const handleStartGame = () => {
-      audioStart.play();
-      audioGameMusic.loop = true;
-      audioGameMusic.play();
-      setShowSplash(false);
-    };
+  const audioStart = new Audio("./start.mp3");
 
-
+  const handleStartGame = () => {
+    audioStart.play();
+    audioGameMusic.loop = true;
+    audioGameMusic.play();
+    setShowSplash(false);
+  };
 
   return (
     <div
-      className={`min-h-screen ${showSplash ? "bg-white" : "bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300"} flex items-center justify-center`}
+      className={`min-h-screen ${
+        showSplash
+          ? "bg-white"
+          : "bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300"
+      } flex items-center justify-center`}
       style={
         showSplash
           ? {
@@ -210,7 +212,7 @@ const MemoryTileGame = () => {
     >
       {showSplash ? (
         <div className="text-center p-8 space-y-6 max-w-lg w-full bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg">
-          <p>puzzle-pals.vercel.app</p>
+          <p>puzzle.JesseJesse.com</p>
           <p className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg">
             Welcome to Puzzle Pals!
           </p>
@@ -267,20 +269,18 @@ const MemoryTileGame = () => {
                   key={i}
                   className="confetti"
                   style={{
-  position: 'absolute',
-  top: '50%', 
-  left: `${Math.random() * 100}vw`,
-  transform: 'translateY(-50%)', 
-  animationDelay: `${Math.random() * 5}s`,
-}}
-
+                    left: `${Math.random() * 100}vw`,
+                    animationDelay: `${Math.random() * 5}s`,
+                    animationName: "fall",
+                    animationDuration: `${Math.random() * 2 + 3}s`,
+                    fontSize: `${Math.random() * 10 + 15}px`, // Random font size for variety
+                  }}
                 >
                   🎉
                 </div>
               ))}
             </div>
           )}
-
           {playerName && (
             <div className="text-6xl font-bold text-gray-800 mb-6 animate-fade-in">
               <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
@@ -288,14 +288,13 @@ const MemoryTileGame = () => {
               </span>
             </div>
           )}
-
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Matches: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
-              className="bubbly-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="tgl-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               X
             </button>
@@ -305,11 +304,15 @@ const MemoryTileGame = () => {
             {tiles.map((tile, index) => (
               <div
                 key={tile.id}
-                className={`tile-container w-24 h-24 md:w-32 md:h-32 cursor-pointer ${tile.animate ? "spin-on-match pop-on-match" : ""} ${tile.isMatched ? "glow" : ""}`}
+                className={`tile-container w-24 h-24 md:w-32 md:h-32 cursor-pointer ${
+                  tile.animate ? "spin-on-match pop-on-match" : ""
+                } ${tile.isMatched ? "glow" : ""}`}
                 onClick={() => handleTileClick(index)}
               >
                 <div
-                  className={`tile-inner ${tile.isFlipped || tile.isMatched ? "tile-flipped" : ""}`}
+                  className={`tile-inner ${
+                    tile.isFlipped || tile.isMatched ? "tile-flipped" : ""
+                  }`}
                 >
                   <div className="tile-face tile-front border border-gray-300 bg-white">
                     <span className="text-2xl text-gray-600">❓</span>
@@ -332,6 +335,11 @@ const MemoryTileGame = () => {
 };
 
 export default MemoryTileGame;
+
+
+
+
+
 
 
 
