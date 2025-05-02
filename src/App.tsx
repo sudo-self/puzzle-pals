@@ -255,7 +255,7 @@ const MemoryTileGame = () => {
               />
             ))}
           </div>
-        <button
+<button
   onClick={() => {
     audioPunch.play(); // Play punch sound
     setShowSplash(false); // Hide splash screen
@@ -264,6 +264,7 @@ const MemoryTileGame = () => {
 >
   Start Game
 </button>
+
 
             <i>Data of any kind is not saved by this app</i>
           </p>
