@@ -257,7 +257,7 @@ const MemoryTileGame = () => {
             Start Game
           </button>
           <p>
-            <i>Data of ANY kind is not saved by this app</i>
+            <i>data of ANY kind is not exported by this app</i>
           </p>
         </div>
       ) : (
