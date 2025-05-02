@@ -31,7 +31,10 @@ const MemoryTileGame = () => {
   const audioFail = new Audio("./fail.mp3");
   const audioRumble = new Audio("./win.mp3");
   const audioGameMusic = new Audio("./lobby.mp3");
+  const audioPunch = new Audio("./punch.mp3"); //
 
+
+  
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
     return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
@@ -124,6 +127,7 @@ const MemoryTileGame = () => {
     if (tiles[i1].content === tiles[i2].content) {
       audioMatch.play();
       audioRumble.play(); // Play the rumble sound on a match
+
       setMatches((m) => m + 1);
 
       const newTiles = tiles.map((tile, i) =>
@@ -251,13 +255,16 @@ const MemoryTileGame = () => {
               />
             ))}
           </div>
-          <button
-            onClick={() => setShowSplash(false)}
-            className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg"
-          >
-            Start Game
-          </button>
-          <p>
+        <button
+  onClick={() => {
+    audioPunch.play(); // Play punch sound
+    setShowSplash(false); // Hide splash screen
+  }}
+  className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg"
+>
+  Start Game
+</button>
+
             <i>Data of any kind is not saved by this app</i>
           </p>
         </div>
@@ -336,16 +343,6 @@ const MemoryTileGame = () => {
 };
 
 export default MemoryTileGame;
-
-
-
-
-
-
-
-
-
-
 
 
 
