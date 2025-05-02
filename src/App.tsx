@@ -122,7 +122,7 @@ const MemoryTileGame = () => {
   const checkForMatch = (i1: number, i2: number) => {
     if (tiles[i1].content === tiles[i2].content) {
       audioMatch.play();
-      audioRumble.play(); // Play the rumble sound on a match
+      audioRumble.play(); 
       setMatches((m) => m + 1);
 
       const newTiles = tiles.map((tile, i) =>
@@ -257,7 +257,7 @@ const MemoryTileGame = () => {
             Start Game
           </button>
           <p>
-            <i>Data of any kind is not saved by this app</i>
+            <i>Data of ANY kind is not saved by this app</i>
           </p>
         </div>
       ) : (
@@ -273,7 +273,7 @@ const MemoryTileGame = () => {
                     animationDelay: `${Math.random() * 5}s`,
                     animationName: "fall",
                     animationDuration: `${Math.random() * 2 + 3}s`,
-                    fontSize: `${Math.random() * 10 + 15}px`, // Random font size for variety
+                    fontSize: `${Math.random() * 10 + 15}px`, 
                   }}
                 >
                   🎉
@@ -290,13 +290,13 @@ const MemoryTileGame = () => {
           )}
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Matches: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Pals Made: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
               className="tgl-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
-              X
+              X End Game
             </button>
           </div>
 
