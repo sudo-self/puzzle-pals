@@ -225,12 +225,12 @@ const MemoryTileGame = () => {
             type="text"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Player Name (optional)"
+            placeholder="Puzzle Pal Player"
             className="mt-2 p-2 w-full border rounded-md shadow-sm"
           />
           <div className="relative mt-4">
             <button className="neumorphic-button w-full px-4 py-2 rounded-lg bg-white shadow-md border">
-              + Add Photos
+              + Create Custom Game
             </button>
             <input
               type="file"
@@ -257,7 +257,7 @@ const MemoryTileGame = () => {
             Start Game
           </button>
           <p>
-            <i>data of ANY kind is not exported by this app</i>
+            <i>data of ANY kind is not saved by this app</i>
           </p>
         </div>
       ) : (
@@ -290,7 +290,7 @@ const MemoryTileGame = () => {
           )}
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Pals Made: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
@@ -314,8 +314,8 @@ const MemoryTileGame = () => {
                     tile.isFlipped || tile.isMatched ? "tile-flipped" : ""
                   }`}
                 >
-                  <div className="tile-face tile-front border border-gray-300 bg-white">
-                    <span className="text-2xl text-gray-600">🔍</span>
+                  <div className="tile-face tile-front border border-gray-300 bg-blue-200">
+                    <span className="text-2xl text-gray-600"></span>
                   </div>
                   <div className="tile-face tile-back">
                     <img
