@@ -310,7 +310,7 @@ if (matches === pairsToMatch) {
           )}
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Pals Made: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
@@ -355,6 +355,13 @@ if (matches === pairsToMatch) {
 };
 
 export default MemoryTileGame;
+
+
+
+
+
+
+
 
 
 
