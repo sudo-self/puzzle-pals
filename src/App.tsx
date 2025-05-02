@@ -21,11 +21,10 @@ const MemoryTileGame = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [playerName, setPlayerName] = useState("");
+  const [level, setLevel] = useState(1); // ← NEW
 
   const audioMatch = new Audio("./bong.mp3");
-  const audioFlip = new Audio(
-    "https://www.myinstants.com/media/sounds/flip.mp3"
-  );
+  const audioFlip = new Audio("https://www.myinstants.com/media/sounds/flip.mp3");
   const audioWin = new Audio("./bell.mp3");
   const audioFail = new Audio("./fail.mp3");
   const audioRumble = new Audio("./wee.mp3");
@@ -33,37 +32,36 @@ const MemoryTileGame = () => {
 
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
-    return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
-  }, []);
+    return level === 2
+      ? `https://api.dicebear.com/9.x/bottts-neutral/svg?seed=${seed}`
+      : `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
+  }, [level]);
 
   const generateDefaultImages = useCallback(() => {
-    const numPairs = 6;
+    const numPairs = level === 2 ? 8 : 6;
     const avatars = [];
     for (let i = 0; i < numPairs; i++) {
-      avatars.push(generateAvatar());
-      avatars.push(generateAvatar());
+      const avatar = generateAvatar();
+      avatars.push(avatar, avatar);
     }
     return avatars;
-  }, [generateAvatar]);
+  }, [generateAvatar, level]);
 
   const initializeGame = useCallback(() => {
-    const numPairs = 6;
+    const numPairs = level === 2 ? 8 : 6;
     let imagePool: string[];
 
     if (customImages.length >= numPairs) {
       imagePool = customImages.slice(0, numPairs);
     } else if (customImages.length > 0) {
       const remaining = numPairs - customImages.length;
-      const generated = Array(remaining)
-        .fill(null)
-        .map(() => generateAvatar());
+      const generated = Array(remaining).fill(null).map(() => generateAvatar());
       imagePool = [...customImages, ...generated];
     } else {
-      imagePool = generateDefaultImages();
+      imagePool = Array(numPairs).fill(null).map(() => generateAvatar());
     }
 
-    const pairs = imagePool.slice(0, numPairs);
-    const duplicatedPairs = [...pairs, ...pairs];
+    const duplicatedPairs = [...imagePool, ...imagePool];
     const shuffled = duplicatedPairs.sort(() => Math.random() - 0.5);
 
     const initialTiles: Tile[] = shuffled.map((content, index) => ({
@@ -80,38 +78,34 @@ const MemoryTileGame = () => {
     setMatches(0);
     setGameOver(false);
     setShowConfetti(false);
-  }, [customImages, generateAvatar, generateDefaultImages]);
+  }, [customImages, generateAvatar, level]);
 
   useEffect(() => {
     if (!showSplash) initializeGame();
   }, [initializeGame, showSplash]);
 
   useEffect(() => {
-    if (matches === 6) {
+    const winCondition = level === 2 ? 8 : 6;
+    if (matches === winCondition) {
       setGameOver(true);
       audioWin.play();
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
     }
-  }, [matches]);
+  }, [matches, level]);
 
   const handleTileClick = (index: number) => {
     if (
       flippedTiles.length === 2 ||
       tiles[index].isFlipped ||
       tiles[index].isMatched
-    )
-      return;
+    ) return;
 
     audioFlip.play();
     const newFlipped = [...flippedTiles, index];
     setFlippedTiles(newFlipped);
 
-    setTiles(
-      tiles.map((tile, i) =>
-        i === index ? { ...tile, isFlipped: true } : tile
-      )
-    );
+    setTiles(tiles.map((tile, i) => i === index ? { ...tile, isFlipped: true } : tile));
 
     if (newFlipped.length === 2) {
       setMoves((m) => m + 1);
@@ -122,28 +116,20 @@ const MemoryTileGame = () => {
   const checkForMatch = (i1: number, i2: number) => {
     if (tiles[i1].content === tiles[i2].content) {
       audioMatch.play();
-      audioRumble.play(); 
+      audioRumble.play();
       setMatches((m) => m + 1);
-
-      const newTiles = tiles.map((tile, i) =>
-        i === i1 || i === i2
-          ? { ...tile, isMatched: true, animate: true }
-          : tile
+      const updated = tiles.map((tile, i) =>
+        i === i1 || i === i2 ? { ...tile, isMatched: true, animate: true } : tile
       );
-      setTiles(newTiles);
-
+      setTiles(updated);
       setTimeout(() => {
-        setTiles((prev) =>
-          prev.map((tile) => ({ ...tile, animate: false }))
-        );
+        setTiles((prev) => prev.map((tile) => ({ ...tile, animate: false })));
       }, 750);
     } else {
       audioFail.play();
-      setTiles(
-        tiles.map((tile, i) =>
-          i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile
-        )
-      );
+      setTiles(tiles.map((tile, i) =>
+        i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile
+      ));
     }
     setFlippedTiles([]);
   };
@@ -158,9 +144,7 @@ const MemoryTileGame = () => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = (event) => {
-            event.target?.result
-              ? resolve(event.target.result as string)
-              : reject();
+            event.target?.result ? resolve(event.target.result as string) : reject();
           };
           reader.onerror = reject;
           reader.readAsDataURL(file);
@@ -193,148 +177,65 @@ const MemoryTileGame = () => {
     setShowSplash(false);
   };
 
+  const nextLevel = () => {
+    setLevel(2);
+    initializeGame();
+  };
+
   return (
-    <div
-      className={`min-h-screen ${
-        showSplash
-          ? "bg-white"
-          : "bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300"
-      } flex items-center justify-center`}
-      style={
-        showSplash
-          ? {
-              backgroundImage: "url(/logo.png)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }
-          : {}
-      }
-    >
+    <div className="p-4">
       {showSplash ? (
-        <div className="text-center p-8 space-y-6 max-w-lg w-full bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg">
-          <p className="text-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg puzzle.JesseJesse.com</p>
-          <p className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg">
-            Welcome to Puzzle Pals!
-          </p>
-          <img
-            src="./pals.svg"
-            alt="Puzzle Pals Logo"
-            className="w-96 h-96 mx-auto"
-          />
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Memory Game</h1>
           <input
             type="text"
+            placeholder="Enter your name"
             value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Puzzle Pal Player Tag"
-            className="mt-2 p-2 w-full border rounded-md shadow-sm"
+            onChange={handleNameChange}
+            className="border p-2"
           />
-          <div className="relative mt-4">
-            <button className="neumorphic-button w-full px-4 py-2 rounded-lg bg-white shadow-md border">
-              + Custom Tiles
-            </button>
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-            />
-          </div>
-          <div className="grid grid-cols-4 gap-2 mt-4">
-            {customImages.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt="Preview"
-                className="w-16 h-16 rounded-lg object-cover"
-              />
-            ))}
-          </div>
-          <button
-            onClick={() => setShowSplash(false)}
-            className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg"
-          >
+          <button onClick={handleStartGame} className="ml-4 bg-blue-500 text-white p-2 rounded">
             Start Game
           </button>
-          <p>
-            <i>data of ANY kind is not saved by this app</i>
-          </p>
         </div>
       ) : (
-        <div className="w-full max-w-5xl flex flex-col items-center relative">
-          {showConfetti && (
-            <div className="confetti-container absolute top-0 left-0 w-full h-full pointer-events-none">
-              {[...Array(100)].map((_, i) => (
-                <div
-                  key={i}
-                  className="confetti"
-                  style={{
-                    left: `${Math.random() * 100}vw`,
-                    animationDelay: `${Math.random() * 5}s`,
-                    animationName: "fall",
-                    animationDuration: `${Math.random() * 2 + 3}s`,
-                    fontSize: `${Math.random() * 10 + 15}px`, 
-                  }}
-                >
-                  ⭐
-                </div>
-              ))}
-            </div>
-          )}
-          {playerName && (
-            <div className="text-6xl font-bold text-gray-800 mb-6 animate-fade-in">
-              <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-                {playerName}
-              </span>
-            </div>
-          )}
-          <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
-            <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
-            </div>
-            <button
-              onClick={handleRestart}
-              className="tgl-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              X
-            </button>
-          </div>
-
-          <div className="grid grid-cols-4 gap-4">
-            {tiles.map((tile, index) => (
+        <>
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+            {tiles.map((tile) => (
               <div
                 key={tile.id}
-                className={`tile-container w-24 h-24 md:w-32 md:h-32 cursor-pointer ${
-                  tile.animate ? "spin-on-match pop-on-match" : ""
-                } ${tile.isMatched ? "glow" : ""}`}
-                onClick={() => handleTileClick(index)}
+                onClick={() => handleTileClick(tile.id)}
+                className={`cursor-pointer w-24 h-24 border rounded shadow ${
+                  tile.isFlipped || tile.isMatched ? "bg-white" : "bg-gray-300"
+                } ${tile.animate ? "animate-bounce" : ""}`}
               >
-                <div
-                  className={`tile-inner ${
-                    tile.isFlipped || tile.isMatched ? "tile-flipped" : ""
-                  }`}
-                >
-                  <div className="tile-face tile-front border border-gray-300 bg-blue-200">
-                    <span className="text-2xl text-gray-600"></span>
-                  </div>
-                  <div className="tile-face tile-back">
-                    <img
-                      src={tile.content}
-                      alt={`Tile ${tile.id}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
+                {(tile.isFlipped || tile.isMatched) && (
+                  <img src={tile.content} alt="tile" className="w-full h-full object-contain" />
+                )}
               </div>
             ))}
           </div>
-        </div>
+          <div className="mt-4 flex justify-between items-center">
+            <p>Moves: {moves}</p>
+            {gameOver && level === 1 && (
+              <button onClick={nextLevel} className="bg-green-500 text-white px-4 py-2 rounded">
+                Go to Level 2
+              </button>
+            )}
+            {gameOver && level === 2 && (
+              <button onClick={handleRestart} className="bg-purple-500 text-white px-4 py-2 rounded">
+                Play Again
+              </button>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
 };
 
 export default MemoryTileGame;
+
 
 
 
