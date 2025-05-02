@@ -31,6 +31,10 @@ const MemoryTileGame = () => {
   const audioRumble = new Audio("./wee.mp3");
   const audioGameMusic = new Audio("./game.mp3");
 
+  const splashMusic = new Audio("./splash.mp3");
+splashMusic.loop = true;
+
+
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
     return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
@@ -94,6 +98,16 @@ const MemoryTileGame = () => {
       setTimeout(() => setShowConfetti(false), 5000);
     }
   }, [matches]);
+
+  useEffect(() => {
+  if (showSplash) {
+    splashMusic.play().catch(console.error);
+  } else {
+    splashMusic.pause();
+    splashMusic.currentTime = 0;
+  }
+}, [showSplash]);
+
 
   const handleTileClick = (index: number) => {
     if (
