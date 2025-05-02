@@ -212,7 +212,7 @@ const MemoryTileGame = () => {
     >
       {showSplash ? (
         <div className="text-center p-8 space-y-6 max-w-lg w-full bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg">
-          <p>puzzle.JesseJesse.com</p>
+          <p>puzzle-pals.vercel.app</p>
           <p className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg">
             Welcome to Puzzle Pals!
           </p>
@@ -230,7 +230,7 @@ const MemoryTileGame = () => {
           />
           <div className="relative mt-4">
             <button className="neumorphic-button w-full px-4 py-2 rounded-lg bg-white shadow-md border">
-              + Add images
+              + Add Photos
             </button>
             <input
               type="file"
