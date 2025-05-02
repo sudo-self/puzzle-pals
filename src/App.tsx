@@ -267,9 +267,13 @@ const MemoryTileGame = () => {
                   key={i}
                   className="confetti"
                   style={{
-                    left: `${Math.random() * 100}vw`,
-                    animationDelay: `${Math.random() * 5}s`,
-                  }}
+  position: 'absolute',
+  top: '50%', 
+  left: `${Math.random() * 100}vw`,
+  transform: 'translateY(-50%)', 
+  animationDelay: `${Math.random() * 5}s`,
+}}
+
                 >
                   🎉
                 </div>
