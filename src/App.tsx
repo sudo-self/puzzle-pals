@@ -210,7 +210,7 @@ const MemoryTileGame = () => {
     >
       {showSplash ? (
         <div className="text-center p-8 space-y-6 max-w-lg w-full bg-gradient-to-br from-blue-300 via-purple-200 to-pink-300 rounded-xl shadow-lg">
-          <p>puzzle.JesseJesse.com</p>
+          <p>puzzle-pals.vercel.app</p>
           <p className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg">
             Welcome to Puzzle Pals!
           </p>
@@ -291,11 +291,11 @@ const MemoryTileGame = () => {
 
           <div className="mb-6 flex justify-between w-full px-6 text-xl font-semibold">
             <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
-              Moves: <b>{moves}</b> | Matches: <b>{matches}</b>
+              Moves: <b>{moves}</b> | Pals: <b>{matches}</b>
             </div>
             <button
               onClick={handleRestart}
-              className="tgl-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="bubbly-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               X
             </button>
