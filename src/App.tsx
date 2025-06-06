@@ -344,19 +344,19 @@ const MemoryTileGame = () => {
                 onClick={() => setDifficulty("easy")}
                 className={`p-2 rounded-md ${difficulty === "easy" ? "bg-green-500 text-white" : "bg-gray-200"}`}
               >
-                Easy (4 pairs)
+                Easy
               </button>
               <button
                 onClick={() => setDifficulty("medium")}
                 className={`p-2 rounded-md ${difficulty === "medium" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
               >
-                Medium (6 pairs)
+                Medium
               </button>
               <button
                 onClick={() => setDifficulty("hard")}
                 className={`p-2 rounded-md ${difficulty === "hard" ? "bg-red-500 text-white" : "bg-gray-200"}`}
               >
-                Hard (8 pairs)
+                Hard
               </button>
             </div>
 
@@ -416,7 +416,7 @@ const MemoryTileGame = () => {
 
             {showScores && (
               <div className="mt-4 bg-white bg-opacity-80 rounded-lg p-4">
-                <h3 className="font-bold mb-2">High Scores</h3>
+                <h3 className="font-bold mb-2">Leaderboard</h3>
                 {scores.length === 0 ? (
                   <p>No scores yet!</p>
                 ) : (
@@ -570,7 +570,7 @@ const MemoryTileGame = () => {
               onClick={handleNewGame}
               className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              Restart Game
+              Restart
             </button>
           </div>
         </div>
