@@ -410,23 +410,26 @@ const MemoryTileGame = () => {
               </div>
             )}
 
-            <button
-              onClick={() => {
-                audioRefs.current.punch.play();
-                handleStartGame();
-              }}
-              className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg hover:scale-105 transition-transform"
-              disabled={customImages.length > (difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8)}
-            >
-              Start Game
-            </button>
+          <div className="flex flex-col items-center space-y-4">
+  <button
+    onClick={() => {
+      audioRefs.current.punch.play();
+      handleStartGame();
+    }}
+    className="mt-6 px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg hover:scale-105 transition-transform"
+    disabled={customImages.length > (difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8)}
+  >
+    Start Game
+  </button>
 
-            <button
-              onClick={() => setShowScores(!showScores)}
-              className="text-blue-600 hover:underline mt-4"
-            >
-              {showScores ? "Hide High Scores" : "View High Scores"}
-            </button>
+  <button
+    onClick={() => setShowScores(!showScores)}
+    className="text-blue-600 hover:underline"
+  >
+    {showScores ? "exit" : "High Scores"}
+  </button>
+</div>
+
 
             {showScores && (
               <div className="mt-4 bg-white bg-opacity-80 rounded-lg p-4">
