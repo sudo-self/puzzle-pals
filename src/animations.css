@@ -1,8 +1,11 @@
+/* Tailwind Directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Animations and Utilities */
 @layer utilities {
+  /* Basic Animations */
   .animate-fade-in {
     animation: fadeIn 0.8s ease-out both;
     will-change: opacity, transform;
@@ -46,31 +49,31 @@
       transform: translateY(-10px);
     }
   }
-}
 
-/* Enhanced glow effect with color variations */
-.glow {
-  box-shadow: 0 0 12px 6px rgba(255, 215, 0, 0.7);
-  animation: pulse-glow 1.2s ease-in-out infinite alternate;
-  will-change: box-shadow;
-}
-
-@keyframes pulse-glow {
-  0% {
+  /* Enhanced Glow Effect */
+  .glow {
     box-shadow: 0 0 12px 6px rgba(255, 215, 0, 0.7);
+    animation: pulse-glow 1.2s ease-in-out infinite alternate;
+    will-change: box-shadow;
   }
-  33% {
-    box-shadow: 0 0 16px 8px rgba(100, 255, 218, 0.8);
-  }
-  66% {
-    box-shadow: 0 0 16px 8px rgba(255, 100, 218, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 20px 10px rgba(255, 255, 0, 1);
+
+  @keyframes pulse-glow {
+    0% {
+      box-shadow: 0 0 12px 6px rgba(255, 215, 0, 0.7);
+    }
+    33% {
+      box-shadow: 0 0 16px 8px rgba(100, 255, 218, 0.8);
+    }
+    66% {
+      box-shadow: 0 0 16px 8px rgba(255, 100, 218, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 20px 10px rgba(255, 255, 0, 1);
+    }
   }
 }
 
-/* 3D Tile flipping with depth */
+/* Tile Styling */
 .tile-container {
   perspective: 1200px;
   transform-style: preserve-3d;
@@ -112,7 +115,7 @@
   background: white;
 }
 
-/* Match animation with 3D effect */
+/* Match Animations */
 .spin-on-match {
   animation: spinMatch 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
@@ -142,7 +145,7 @@
   }
 }
 
-/* Puzzle font with better fallbacks */
+/* Puzzle Font */
 @font-face {
   font-family: 'PuzzleFont';
   src: url('./puzzle.ttf') format('truetype');
@@ -155,7 +158,7 @@
   font-family: 'PuzzleFont', 'Comic Sans MS', 'Marker Felt', 'Segoe UI Emoji', sans-serif;
 }
 
-/* Enhanced bubbly button with particles */
+/* Interactive Buttons */
 .bubbly-button {
   position: relative;
   font-family: 'PuzzleFont', sans-serif;
@@ -202,7 +205,7 @@
   box-shadow: 0 2px 10px rgba(255, 0, 130, 0.4);
 }
 
-/* Particle effects */
+/* Button Particles */
 .button-particle {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
@@ -222,7 +225,7 @@
   }
 }
 
-/* Enhanced rumble animation */
+/* Rumble Effect */
 .rumble {
   animation: rumble 0.4s linear;
 }
@@ -235,7 +238,18 @@
   80% { transform: translate(3px, 3px) rotate(1deg); }
 }
 
-/* Confetti with more variety and physics */
+/* Confetti System */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
 .confetti {
   position: absolute;
   width: 12px;
@@ -283,18 +297,7 @@
   }
 }
 
-.confetti-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 100;
-  overflow: hidden;
-}
-
-/* Dark mode adaptations */
+/* Dark Mode Adaptations */
 .dark .tile-front {
   background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
 }
@@ -303,7 +306,28 @@
   background: #2d3748;
 }
 
-/* Performance optimizations */
+/* Winning Animation */
+.winning-tile {
+  animation: winningPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes winningPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 215, 0, 0.4);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  }
+}
+
+/* Theme Transitions */
+.tile-face, .tile-container, .bubbly-button {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Accessibility */
 @media (prefers-reduced-motion) {
   .tile-inner {
     transition: none !important;
@@ -321,7 +345,7 @@
   }
 }
 
-/* Mobile optimizations */
+/* Mobile Optimizations */
 @media (max-width: 768px) {
   .tile-container {
     perspective: 800px;
@@ -338,23 +362,82 @@
   }
 }
 
-/* Special winning animation */
-.winning-tile {
-  animation: winningPulse 1.5s ease-in-out infinite alternate;
+/* Basic Tile Flip Animation (Fallback) */
+.tile-container {
+  perspective: 1000px;
 }
 
-@keyframes winningPulse {
+.tile-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.tile-flipped {
+  transform: rotateY(180deg);
+}
+
+.tile-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile-front {
+  z-index: 2;
+}
+
+.tile-back {
+  transform: rotateY(180deg);
+}
+
+/* Basic Match Animations */
+@keyframes spin {
+  0% { transform: rotateY(0); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Basic Confetti */
+.confetti-basic {
+  position: absolute;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes fall {
   0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 rgba(255, 215, 0, 0.4);
+    top: -10%;
+    transform: rotate(0deg);
   }
   100% {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    top: 100%;
+    transform: rotate(360deg);
   }
 }
 
-/* Smooth transitions for theme changes */
-.tile-face, .tile-container, .bubbly-button {
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+/* Utility Classes */
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+
+
+
