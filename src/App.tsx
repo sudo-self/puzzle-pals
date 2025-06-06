@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./animations.css";
 
+// Type definitions
 interface Tile {
   id: number;
   content: string;
@@ -16,7 +17,9 @@ interface Score {
   date: string;
 }
 
+// Main component
 const MemoryTileGame = () => {
+  // Game state
   const [tiles, setTiles] = useState<Tile[]>([]);
   const [flippedTiles, setFlippedTiles] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -81,11 +84,13 @@ const MemoryTileGame = () => {
     return () => clearInterval(interval);
   }, [isTimerRunning]);
 
+  // Generate random avatar images
   const generateAvatar = useCallback(() => {
     const seed = Math.random().toString(36).substring(7);
     return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${seed}`;
   }, []);
 
+  // Generate default images based on difficulty
   const generateDefaultImages = useCallback(() => {
     const numPairs = difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8;
     const avatars = [];
@@ -96,6 +101,7 @@ const MemoryTileGame = () => {
     return avatars;
   }, [generateAvatar, difficulty]);
 
+  // Initialize game board
   const initializeGame = useCallback(() => {
     const numPairs = difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8;
     let imagePool: string[];
@@ -134,10 +140,12 @@ const MemoryTileGame = () => {
     setShowConfetti(false);
   }, [customImages, generateAvatar, generateDefaultImages, difficulty]);
 
+  // Start game after splash screen
   useEffect(() => {
     if (!showSplash) initializeGame();
   }, [initializeGame, showSplash]);
 
+  // Check for win condition
   useEffect(() => {
     const totalPairs = difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8;
     if (matches === totalPairs) {
@@ -159,6 +167,7 @@ const MemoryTileGame = () => {
     }
   }, [matches, difficulty, playerName, moves]);
 
+  // Handle tile click
   const handleTileClick = (index: number) => {
     if (
       flippedTiles.length === 2 ||
@@ -184,6 +193,7 @@ const MemoryTileGame = () => {
     }
   };
 
+  // Check if flipped tiles match
   const checkForMatch = (i1: number, i2: number) => {
     if (tiles[i1].content === tiles[i2].content) {
       audioRefs.current.match.play();
@@ -212,6 +222,7 @@ const MemoryTileGame = () => {
     setFlippedTiles([]);
   };
 
+  // Handle image uploads
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -237,6 +248,7 @@ const MemoryTileGame = () => {
     e.target.value = "";
   };
 
+  // Game control functions
   const handleRestart = () => {
     setShowSplash(true);
     setIsTimerRunning(false);
@@ -257,6 +269,7 @@ const MemoryTileGame = () => {
     setShowSplash(false);
   };
 
+  // Helper functions
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -268,6 +281,7 @@ const MemoryTileGame = () => {
     setImageUploads(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Render
   return (
     <div
       className={`min-h-screen ${
@@ -580,6 +594,3 @@ const MemoryTileGame = () => {
 };
 
 export default MemoryTileGame;
-
-
-
