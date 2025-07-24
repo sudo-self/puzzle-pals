@@ -9,6 +9,7 @@ interface Tile {
   isMatched: boolean;
   animate: boolean;
   rumble?: boolean;
+  isHinted?: boolean;
 }
 
 interface Score {
@@ -51,6 +52,7 @@ const MemoryTileGame = () => {
   const [hoveredTile, setHoveredTile] = useState<number | null>(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [hintCount, setHintCount] = useState(3);
   
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({});
   const gameContainerRef = useRef<HTMLDivElement>(null);
@@ -67,6 +69,7 @@ const MemoryTileGame = () => {
       punch: new Audio("./punch.mp3"),
       start: new Audio("./lobby.mp3"),
       click: new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"),
+      hint: new Audio("https://assets.mixkit.co/sfx/preview/mixkit-magic-sparkles-1681.mp3"),
     };
 
     // Set initial volume
@@ -156,6 +159,7 @@ const MemoryTileGame = () => {
       isFlipped: false,
       isMatched: false,
       animate: false,
+      isHinted: false,
     }));
 
     setTiles(initialTiles);
@@ -163,6 +167,7 @@ const MemoryTileGame = () => {
     setMoves(0);
     setMatches(0);
     setTimer(0);
+    setHintCount(3);
     setIsTimerRunning(true);
     setGameOver(false);
     setShowConfetti(false);
@@ -216,7 +221,7 @@ const MemoryTileGame = () => {
 
     setTiles(
       tiles.map((tile, i) =>
-        i === index ? { ...tile, isFlipped: true } : tile,
+        i === index ? { ...tile, isFlipped: true, isHinted: false } : tile,
       ),
     );
 
@@ -236,7 +241,7 @@ const MemoryTileGame = () => {
 
       const newTiles = tiles.map((tile, i) =>
         i === i1 || i === i2
-          ? { ...tile, isMatched: true, animate: true }
+          ? { ...tile, isMatched: true, animate: true, isHinted: false }
           : tile,
       );
       setTiles(newTiles);
@@ -248,12 +253,43 @@ const MemoryTileGame = () => {
       audioRefs.current.fail.play();
       setTiles(
         tiles.map((tile, i) =>
-          i === i1 || i === i2 ? { ...tile, isFlipped: false } : tile,
+          i === i1 || i === i2 ? { ...tile, isFlipped: false, isHinted: false } : tile,
         ),
       );
     }
     setFlippedTiles([]);
   };
+
+  // Show hint
+  const showHint = useCallback(() => {
+    if (hintCount <= 0 || flippedTiles.length > 0 || gameOver) return;
+    
+    audioRefs.current.hint.play();
+    
+    const unmatchedTiles = tiles.filter(t => !t.isMatched && !t.isFlipped);
+    if (unmatchedTiles.length < 2) return;
+    
+    const randomTile = unmatchedTiles[Math.floor(Math.random() * unmatchedTiles.length)];
+    const match = tiles.find(t => 
+      t.id !== randomTile.id && 
+      t.content === randomTile.content && 
+      !t.isMatched &&
+      !t.isFlipped
+    );
+
+    if (!match) return;
+
+    setHintCount(prev => prev - 1);
+    setTiles(tiles.map(t => 
+      t.id === randomTile.id || t.id === match.id 
+        ? { ...t, isHinted: true } 
+        : t
+    ));
+
+    setTimeout(() => {
+      setTiles(tiles.map(t => ({ ...t, isHinted: false })));
+    }, 2000);
+  }, [tiles, hintCount, flippedTiles.length, gameOver]);
 
   // Handle image uploads
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -527,6 +563,7 @@ const MemoryTileGame = () => {
                   <li>• Try to find all pairs in the fewest moves and shortest time</li>
                   <li>• Higher difficulties have more pairs to match</li>
                   <li>• You can upload your own images for a personalized game</li>
+                  <li>• Use hints (💡) to reveal a matching pair temporarily</li>
                 </ul>
               </div>
             )}
@@ -664,6 +701,17 @@ const MemoryTileGame = () => {
               <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
                 ⏱️ Time: <b>{formatTime(timer)}</b>
               </div>
+              <button
+                onClick={showHint}
+                disabled={hintCount <= 0 || flippedTiles.length > 0 || gameOver}
+                className={`px-3 py-1 rounded-full flex items-center gap-1 ${
+                  hintCount <= 0 || flippedTiles.length > 0 || gameOver
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
+                } transition-colors`}
+              >
+                💡 Hint ({hintCount})
+              </button>
             </div>
           </div>
 
@@ -679,6 +727,7 @@ const MemoryTileGame = () => {
                   <p className="text-xl">Completed in <b>{moves}</b> moves</p>
                   <p className="text-xl">Time: <b>{formatTime(timer)}</b></p>
                   <p className="text-xl">Difficulty: <b>{DIFFICULTY_SETTINGS[difficulty].name}</b></p>
+                  <p className="text-xl">Hints remaining: <b>{hintCount}</b></p>
                 </div>
                 <div className="flex space-x-4 justify-center">
                   <button
@@ -728,7 +777,7 @@ const MemoryTileGame = () => {
                     theme === "light" 
                       ? "border border-gray-300 bg-white" 
                       : "border border-gray-600 bg-gray-800"
-                  }`}>
+                  } ${tile.isHinted ? "hint-glow" : ""}`}>
                     <span className="text-3xl opacity-70">❓</span>
                   </div>
                   <div className="tile-face tile-back flex items-center justify-center">
