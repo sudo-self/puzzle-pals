@@ -402,19 +402,39 @@ const Confetti: React.FC<{ show: boolean }> = ({ show }) => {
   if (!show) return null;
 
   return (
-    <div className="confetti-container absolute top-0 left-0 w-full h-full pointer-events-none z-20">
-      {[...Array(150)].map((_, i) => (
+    <div className="confetti-container">
+      {[...Array(150)].map((_, i) => {
+        const randomHue = Math.random() * 360;
+        const randomDelay = Math.random() * 5;
+        const randomTX = (Math.random() - 0.5) * 2;
+        
+        return (
+          <div
+            key={i}
+            className="confetti"
+            style={{
+              '--delay': `${randomDelay}s`,
+              '--tx': randomTX,
+              left: `${Math.random() * 100}vw`,
+              background: `hsl(${randomHue}, 100%, 50%)`,
+              animationDelay: `${randomDelay}s`,
+            } as React.CSSProperties}
+          />
+        );
+      })}
+      
+
+      {[...Array(50)].map((_, i) => (
         <div
-          key={i}
-          className="confetti"
+          key={`fallback-${i}`}
+          className="confetti-basic"
           style={{
             left: `${Math.random() * 100}vw`,
             animationDelay: `${Math.random() * 5}s`,
-            animationName: "fall",
-            animationDuration: `${Math.random() * 2 + 3}s`,
             fontSize: `${Math.random() * 10 + 15}px`,
             color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-          }}
+            '--tx': (Math.random() - 0.5) * 2,
+          } as React.CSSProperties}
         >
           {["🏆", "🎉", "✨", "🌟", "🎊", "💎", "🥇", "👑"][Math.floor(Math.random() * 8)]}
         </div>
@@ -422,7 +442,7 @@ const Confetti: React.FC<{ show: boolean }> = ({ show }) => {
     </div>
   );
 };
-
+  
 const GameBoard: React.FC<{
   tiles: Tile[];
   difficulty: "easy" | "medium" | "hard";
