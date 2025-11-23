@@ -531,19 +531,22 @@
   transform: rotate(45deg);
 }
 
-.confetti:nth-child(6n)     { animation-delay: calc(var(--delay) * 1); }
-.confetti:nth-child(6n+1)   { animation-delay: calc(var(--delay) * 1.2); }
-.confetti:nth-child(6n+2)   { animation-delay: calc(var(--delay) * 1.4); }
-.confetti:nth-child(6n+3)   { animation-delay: calc(var(--delay) * 1.6); }
-.confetti:nth-child(6n+4)   { animation-delay: calc(var(--delay) * 1.8); }
-.confetti:nth-child(6n+5)   { animation-delay: calc(var(--delay) * 2); }
+/* Staggered animation delays */
+.confetti:nth-child(6n)     { animation-delay: calc(var(--delay, 0) * 1); }
+.confetti:nth-child(6n+1)   { animation-delay: calc(var(--delay, 0) * 1.2); }
+.confetti:nth-child(6n+2)   { animation-delay: calc(var(--delay, 0) * 1.4); }
+.confetti:nth-child(6n+3)   { animation-delay: calc(var(--delay, 0) * 1.6); }
+.confetti:nth-child(6n+4)   { animation-delay: calc(var(--delay, 0) * 1.8); }
+.confetti:nth-child(6n+5)   { animation-delay: calc(var(--delay, 0) * 2); }
 
 @keyframes confetti-fall {
   0% {
     transform: translateY(-50px) translateX(var(--tx, 0)) rotate(0) scale(0.8);
+    opacity: 1;
   }
   100% {
     transform: translateY(100vh) translateX(calc(var(--tx, 0) * 4)) rotate(1080deg) scale(1.2);
+    opacity: 0;
   }
 }
 
@@ -556,6 +559,23 @@
   0% { opacity: 1; }
   70% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+/* Keep this as fallback for the React code */
+.confetti-basic {
+  position: absolute;
+  animation: fall 5s linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    top: 100%;
+    transform: translateX(calc(var(--tx, 0) * 100px)) rotate(360deg);
+  }
 }
 
 /* Score Pop Animation */
