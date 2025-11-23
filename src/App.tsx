@@ -475,7 +475,7 @@ const GameBoard: React.FC<{
                 ? "border border-gray-300 bg-white" 
                 : "border border-gray-600 bg-gray-800"
             } ${tile.isHinted ? "hint-glow" : ""}`}>
-              <span className="text-3xl opacity-70">❓</span>
+              <span className="text-3xl opacity-70">❔</span>
             </div>
             <div className="tile-face tile-back flex items-center justify-center">
               <img
