@@ -137,6 +137,7 @@ const TouchButton: React.FC<{
         touch-manipulation select-none
         active:scale-95 transition-transform duration-150
         disabled:opacity-50 disabled:active:scale-100
+        rounded-lg font-medium
         ${className}
       `}
       style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -182,198 +183,198 @@ const SplashScreen: React.FC<{
   };
 
   return (
-    <div className={`text-center p-4 md:p-8 space-y-6 max-w-lg w-full rounded-xl shadow-lg ${
-      theme === "light" 
-        ? "bg-white/90 backdrop-blur-sm" 
-        : "bg-gray-800/90 backdrop-blur-sm"
-    }`}>
-      <h1 className="text-3xl md:text-4xl font-bold mb-4">
-        <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-          Puzzle Pals
-        </span>
-      </h1>
-      <p className="text-base md:text-lg">A memory card matching game</p>
-      
-      <div className="flex justify-center my-4">
-        <img
-          src="./pals.svg"
-          alt="Puzzle Pals Logo"
-          className="w-48 h-48 md:w-64 md:h-64 mx-auto animate-bounce"
-        />
-      </div>
-
-      <div className="space-y-4">
-        <input
-          type="text"
-          value={playerName}
-          onChange={(e) => onNameChange(e.target.value)}
-          placeholder="Player Name (optional)"
-          className="mt-2 p-3 w-full border rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent text-base md:text-lg min-h-[48px]"
-        />
-
-        <div className="flex flex-col md:flex-row gap-2">
-          <TouchButton
-            onClick={() => {
-              playSound("click");
-              onThemeChange();
-            }}
-            className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
-            size="md"
-          >
-            {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-          </TouchButton>
+    <div className={`min-h-screen flex items-center justify-center p-4`}>
+      <div className={`text-center w-full max-w-md space-y-6 rounded-2xl shadow-2xl p-6 ${
+        theme === "light" 
+          ? "bg-white/95 backdrop-blur-sm" 
+          : "bg-gray-800/95 backdrop-blur-sm"
+      }`}>
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold">
+            <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
+              Puzzle Pals
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">A memory card matching game</p>
           
-          <div className="flex-1 flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-md px-3 min-h-[48px]">
-            <span className="text-sm">🔊</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={volume}
-              onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
-              className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+          <div className="flex justify-center py-4">
+            <img
+              src="./pals.svg"
+              alt="Puzzle Pals Logo"
+              className="w-48 h-48 animate-bounce"
             />
-            <span className="text-sm w-12">{Math.round(volume * 100)}%</span>
           </div>
-        </div>
 
-        <div className="grid grid-cols-3 gap-2">
-          {Object.entries(DIFFICULTY_SETTINGS).map(([key, setting]) => (
-            <TouchButton
-              key={key}
-              onClick={() => {
-                playSound("click");
-                onDifficultyChange(key as "easy" | "medium" | "hard");
-              }}
-              className={`transition-all ${
-                difficulty === key 
-                  ? key === "easy" 
-                    ? "bg-green-500 text-white shadow-lg" 
-                    : key === "medium" 
-                      ? "bg-blue-500 text-white shadow-lg" 
-                      : "bg-red-500 text-white shadow-lg"
-                  : theme === "light" 
-                    ? "bg-gray-200 hover:bg-gray-300" 
-                    : "bg-gray-700 hover:bg-gray-600"
-              }`}
-              size="sm"
-            >
-              {setting.name}
-              <div className="text-xs mt-1">
-                {setting.pairs} pairs
+          <div className="space-y-4">
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => onNameChange(e.target.value)}
+              placeholder="Player Name (optional)"
+              className="w-full p-4 border-2 rounded-xl text-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-transparent"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <TouchButton
+                onClick={() => {
+                  playSound("click");
+                  onThemeChange();
+                }}
+                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+                size="md"
+              >
+                {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+              </TouchButton>
+              
+              <div className="flex items-center space-x-3 bg-gray-100 dark:bg-gray-700 rounded-xl px-4">
+                <span className="text-lg">🔊</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value={volume}
+                  onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                />
+                <span className="text-sm w-8">{Math.round(volume * 100)}%</span>
               </div>
-            </TouchButton>
-          ))}
-        </div>
+            </div>
 
-        <div className="relative">
-          <TouchButton
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
-            onClick={handleImageUploadClick}
-            size="md"
-          >
-            + Add Custom Images ({customImages.length}/{DIFFICULTY_SETTINGS[difficulty].pairs})
-          </TouchButton>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => onImageUpload(e.target.files)}
-            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-          />
-        </div>
-
-        {customImages.length > 0 && (
-          <div className="mt-4">
-            <h3 className="text-sm font-semibold mb-2">Selected Images:</h3>
-            <div className="grid grid-cols-4 gap-2">
-              {customImages.map((img, i) => (
-                <div key={i} className="relative group">
-                  <img
-                    src={img}
-                    alt="Preview"
-                    className="w-16 h-16 rounded-lg object-cover border cursor-pointer hover:opacity-80 transition-opacity"
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playSound("click");
-                      onRemoveImage(i);
-                    }}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors touch-manipulation"
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
-                  >
-                    ×
-                  </button>
-                </div>
+            <div className="grid grid-cols-3 gap-3">
+              {Object.entries(DIFFICULTY_SETTINGS).map(([key, setting]) => (
+                <TouchButton
+                  key={key}
+                  onClick={() => {
+                    playSound("click");
+                    onDifficultyChange(key as "easy" | "medium" | "hard");
+                  }}
+                  className={`transition-all ${
+                    difficulty === key 
+                      ? key === "easy" 
+                        ? "bg-green-500 text-white shadow-lg" 
+                        : key === "medium" 
+                          ? "bg-blue-500 text-white shadow-lg" 
+                          : "bg-red-500 text-white shadow-lg"
+                      : theme === "light" 
+                        ? "bg-gray-200 hover:bg-gray-300" 
+                        : "bg-gray-700 hover:bg-gray-600"
+                  }`}
+                  size="sm"
+                >
+                  <div className="text-sm font-semibold">{setting.name}</div>
+                  <div className="text-xs opacity-90">{setting.pairs} pairs</div>
+                </TouchButton>
               ))}
             </div>
-          </div>
-        )}
 
-        <div className="flex flex-col items-center space-y-4 pt-4">
-          <TouchButton
-            onClick={() => {
-              playSound("punch");
-              onStartGame();
-            }}
-            className="mt-2 text-xl font-bold text-white rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={customImages.length > DIFFICULTY_SETTINGS[difficulty].pairs}
-            size="lg"
-          >
-            🎮 Start Game
-          </TouchButton>
+            <div className="relative">
+              <TouchButton
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:from-purple-600 hover:to-pink-600"
+                onClick={handleImageUploadClick}
+                size="md"
+              >
+                + Add Images ({customImages.length}/{DIFFICULTY_SETTINGS[difficulty].pairs})
+              </TouchButton>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={(e) => onImageUpload(e.target.files)}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              />
+            </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full">
-            <TouchButton
-              onClick={() => {
-                playSound("click");
-                onToggleScores();
-              }}
-              className="text-blue-600 hover:underline dark:text-blue-400 bg-transparent"
-              size="md"
-            >
-              {showScores ? "Hide Scores" : "View High Scores"}
-            </TouchButton>
-            <TouchButton
-              onClick={() => {
-                playSound("click");
-                onToggleTutorial();
-              }}
-              className="text-purple-600 hover:underline dark:text-purple-400 bg-transparent"
-              size="md"
-            >
-              {showTutorial ? "Hide Tutorial" : "How to Play"}
-            </TouchButton>
+            {customImages.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-sm font-semibold mb-3 text-left">Selected Images:</h3>
+                <div className="grid grid-cols-4 gap-3">
+                  {customImages.map((img, i) => (
+                    <div key={i} className="relative group">
+                      <img
+                        src={img}
+                        alt="Preview"
+                        className="w-full aspect-square rounded-xl object-cover border-2 border-gray-300 dark:border-gray-600"
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playSound("click");
+                          onRemoveImage(i);
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors touch-manipulation"
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 pt-4">
+              <TouchButton
+                onClick={() => {
+                  playSound("punch");
+                  onStartGame();
+                }}
+                className="w-full text-xl font-bold text-white rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed transition-transform"
+                disabled={customImages.length > DIFFICULTY_SETTINGS[difficulty].pairs}
+                size="lg"
+              >
+                🎮 Start Game
+              </TouchButton>
+
+              <div className="flex gap-4 justify-center">
+                <button
+                  onClick={() => {
+                    playSound("click");
+                    onToggleScores();
+                  }}
+                  className="text-blue-600 hover:underline dark:text-blue-400 text-lg font-medium"
+                >
+                  {showScores ? "Hide Scores" : "High Scores"}
+                </button>
+                <button
+                  onClick={() => {
+                    playSound("click");
+                    onToggleTutorial();
+                  }}
+                  className="text-purple-600 hover:underline dark:text-purple-400 text-lg font-medium"
+                >
+                  {showTutorial ? "Hide Help" : "How to Play"}
+                </button>
+              </div>
+            </div>
+
+            {showTutorial && (
+              <div className={`mt-4 p-4 rounded-xl ${
+                theme === "light" ? "bg-blue-50 border-2 border-blue-200" : "bg-gray-700 border-2 border-gray-600"
+              }`}>
+                <h3 className="font-bold mb-3 text-lg">How to Play</h3>
+                <ul className="text-left space-y-2 text-sm">
+                  <li>• Tap on tiles to flip them over and reveal the image</li>
+                  <li>• Match two identical images to make them disappear</li>
+                  <li>• Try to find all pairs in the fewest moves and shortest time</li>
+                  <li>• Higher difficulties have more pairs to match</li>
+                  <li>• You can upload your own images for a personalized game</li>
+                  <li>• Use hints (💡) to reveal a matching pair temporarily</li>
+                </ul>
+              </div>
+            )}
+
+            {showScores && (
+              <ScoresList 
+                scores={scores}
+                playerName={playerName}
+                theme={theme}
+                onClearScores={onClearScores}
+              />
+            )}
           </div>
         </div>
-
-        {showTutorial && (
-          <div className={`mt-4 p-4 rounded-lg ${
-            theme === "light" ? "bg-blue-50" : "bg-gray-700"
-          }`}>
-            <h3 className="font-bold mb-2">How to Play</h3>
-            <ul className="text-left space-y-2 text-sm">
-              <li>• Tap on tiles to flip them over and reveal the image</li>
-              <li>• Match two identical images to make them disappear</li>
-              <li>• Try to find all pairs in the fewest moves and shortest time</li>
-              <li>• Higher difficulties have more pairs to match</li>
-              <li>• You can upload your own images for a personalized game</li>
-              <li>• Use hints (💡) to reveal a matching pair temporarily</li>
-            </ul>
-          </div>
-        )}
-
-        {showScores && (
-          <ScoresList 
-            scores={scores}
-            playerName={playerName}
-            theme={theme}
-            onClearScores={onClearScores}
-          />
-        )}
       </div>
     </div>
   );
@@ -386,29 +387,29 @@ const ScoresList: React.FC<{
   onClearScores: () => void;
 }> = ({ scores, playerName, theme, onClearScores }) => {
   return (
-    <div className={`mt-4 rounded-lg p-4 ${
-      theme === "light" ? "bg-white/90" : "bg-gray-700/90"
+    <div className={`mt-4 rounded-xl p-4 ${
+      theme === "light" ? "bg-white/90 border-2 border-gray-200" : "bg-gray-700/90 border-2 border-gray-600"
     }`}>
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center mb-3">
         <h3 className="font-bold text-lg">Leaderboard</h3>
         <TouchButton
           onClick={onClearScores}
-          className="bg-red-500 text-white hover:bg-red-600 transition-colors"
+          className="bg-red-500 text-white hover:bg-red-600 transition-colors text-sm"
           size="sm"
         >
           Clear Scores
         </TouchButton>
       </div>
       {scores.length === 0 ? (
-        <p className="text-gray-500">No scores yet! Play a game to appear here.</p>
+        <p className="text-gray-500 text-center py-4">No scores yet! Play a game to appear here.</p>
       ) : (
         <div className="overflow-x-auto touch-pan-x">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b">
+              <tr className="border-b-2">
                 <th className="text-left py-2">Rank</th>
                 <th className="text-left">Name</th>
-                <th className="text-left">Difficulty</th>
+                <th className="text-left">Mode</th>
                 <th className="text-right">Moves</th>
                 <th className="text-right">Time</th>
               </tr>
@@ -427,13 +428,13 @@ const ScoresList: React.FC<{
                       : ""
                   }`}
                 >
-                  <td className="py-2">
+                  <td className="py-3">
                     {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}
                   </td>
-                  <td className="truncate max-w-[80px]">{score.name || "Anonymous"}</td>
-                  <td>{DIFFICULTY_SETTINGS[score.difficulty].name}</td>
-                  <td className="text-right">{score.moves}</td>
-                  <td className="text-right">{formatTime(score.time)}</td>
+                  <td className="max-w-[80px] truncate">{score.name || "Anonymous"}</td>
+                  <td className="text-sm">{DIFFICULTY_SETTINGS[score.difficulty].name}</td>
+                  <td className="text-right font-mono">{score.moves}</td>
+                  <td className="text-right font-mono">{formatTime(score.time)}</td>
                 </tr>
               ))}
             </tbody>
@@ -498,11 +499,14 @@ const GameBoard: React.FC<{
 
   const getGridCols = () => {
     const cols = DIFFICULTY_SETTINGS[difficulty].columns;
-    return `grid-cols-${cols} sm:grid-cols-${cols} md:grid-cols-${cols}`;
+    // Use responsive columns for mobile
+    if (cols <= 4) return `grid-cols-4`;
+    if (cols === 6) return `grid-cols-4 sm:grid-cols-6`;
+    return `grid-cols-4 sm:grid-cols-6 md:grid-cols-8`;
   };
 
   return (
-    <div className={`grid gap-2 sm:gap-3 w-full max-w-full overflow-hidden ${getGridCols()} p-2`}>
+    <div className={`grid gap-2 sm:gap-3 w-full max-w-4xl mx-auto ${getGridCols()} p-2 sm:p-4`}>
       {tiles.map((tile, index) => (
         <div
           key={tile.id}
@@ -524,18 +528,18 @@ const GameBoard: React.FC<{
               tile.isFlipped || tile.isMatched ? "tile-flipped" : ""
             }`}
           >
-            <div className={`tile-face tile-front flex items-center justify-center ${
+            <div className={`tile-face tile-front flex items-center justify-center rounded-xl ${
               theme === "light" 
-                ? "border border-gray-300 bg-white" 
-                : "border border-gray-600 bg-gray-800"
+                ? "border-2 border-gray-300 bg-white" 
+                : "border-2 border-gray-600 bg-gray-800"
             } ${tile.isHinted ? "hint-glow" : ""}`}>
               <span className="text-2xl sm:text-3xl opacity-70">❔</span>
             </div>
-            <div className="tile-face tile-back flex items-center justify-center">
+            <div className="tile-face tile-back flex items-center justify-center rounded-xl">
               <img
                 src={tile.content}
                 alt="Tile Content"
-                className="w-full h-full object-cover rounded-lg select-none"
+                className="w-full h-full object-cover rounded-xl select-none"
                 loading="lazy"
                 draggable={false}
               />
@@ -579,11 +583,6 @@ const MemoryTileGame = () => {
 
   // Memoized game configuration
   const gameConfig = useMemo(() => DIFFICULTY_SETTINGS[difficulty], [difficulty]);
-
-  // Generate default images based on difficulty
-  const generateDefaultImages = useCallback(() => {
-    return Array(gameConfig.pairs * 2).fill(null).map(generateAvatar);
-  }, [gameConfig.pairs]);
 
   // Initialize game board
   const initializeGame = useCallback(() => {
@@ -816,74 +815,54 @@ const MemoryTileGame = () => {
     }
   }, [setScores, playSound]);
 
-  const openImageModal = useCallback((image: string) => {
-    setSelectedImage(image);
-    setShowImageModal(true);
-  }, []);
-
-  const closeImageModal = useCallback(() => {
-    playSound("click");
-    setShowImageModal(false);
-  }, [playSound]);
-
-  // Background style for splash screen
-  const splashBackground = showSplash ? {
-    backgroundImage: "url(/logo.png)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  } : {};
-
   return (
     <div
-      className={`min-h-screen safe-area-inset ${
+      className={`min-h-screen w-full ${
         showSplash
-          ? "bg-white"
+          ? "bg-gradient-to-br from-purple-100 via-pink-100 to-red-100 dark:from-gray-900 dark:via-purple-900 dark:to-pink-900"
           : theme === "light"
-          ? "bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100"
-          : "bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900"
+          ? "bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50"
+          : "bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800"
       } flex items-center justify-center transition-colors duration-300 overflow-hidden`}
-      style={splashBackground}
     >
       {showSplash ? (
-        <div className="w-full h-full overflow-y-auto">
-          <SplashScreen
-            theme={theme}
-            playerName={playerName}
-            difficulty={difficulty}
-            customImages={customImages}
-            imageUploads={imageUploads}
-            scores={scores}
-            showTutorial={showTutorial}
-            showScores={showScores}
-            onNameChange={setPlayerName}
-            onThemeChange={() => setTheme(theme === "light" ? "dark" : "light")}
-            onDifficultyChange={setDifficulty}
-            onImageUpload={handleImageUpload}
-            onRemoveImage={removeImage}
-            onStartGame={handleStartGame}
-            onToggleTutorial={() => setShowTutorial(!showTutorial)}
-            onToggleScores={() => setShowScores(!showScores)}
-            onClearScores={clearScores}
-            volume={volume}
-            onVolumeChange={setVolume}
-            playSound={playSound}
-          />
-        </div>
+        <SplashScreen
+          theme={theme}
+          playerName={playerName}
+          difficulty={difficulty}
+          customImages={customImages}
+          imageUploads={imageUploads}
+          scores={scores}
+          showTutorial={showTutorial}
+          showScores={showScores}
+          onNameChange={setPlayerName}
+          onThemeChange={() => setTheme(theme === "light" ? "dark" : "light")}
+          onDifficultyChange={setDifficulty}
+          onImageUpload={handleImageUpload}
+          onRemoveImage={removeImage}
+          onStartGame={handleStartGame}
+          onToggleTutorial={() => setShowTutorial(!showTutorial)}
+          onToggleScores={() => setShowScores(!showScores)}
+          onClearScores={clearScores}
+          volume={volume}
+          onVolumeChange={setVolume}
+          playSound={playSound}
+        />
       ) : (
-        <div className="w-full max-w-5xl flex flex-col items-center relative p-2 sm:p-4 h-full">
+        <div className="w-full max-w-7xl flex flex-col items-center min-h-screen p-3 sm:p-4">
           <Confetti show={showConfetti} />
 
           {/* Game Header */}
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-2">
-            <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
+            <div className="flex items-center gap-3">
               {playerName && (
-                <div className="text-xl sm:text-2xl md:text-4xl font-bold">
-                  <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
+                <div className="text-2xl sm:text-3xl font-bold">
+                  <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
                     {playerName}
                   </span>
                 </div>
               )}
-              <span className={`text-sm sm:text-lg px-2 sm:px-3 py-1 rounded-full ${
+              <span className={`text-sm sm:text-base px-3 py-1 rounded-full ${
                 difficulty === "easy" 
                   ? "bg-green-100 text-green-800" 
                   : difficulty === "medium" 
@@ -894,47 +873,47 @@ const MemoryTileGame = () => {
               </span>
             </div>
 
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center gap-3">
               <TouchButton
                 onClick={() => {
                   playSound("click");
                   setTheme(theme === "light" ? "dark" : "light");
                 }}
-                className="p-2 rounded-full bg-white bg-opacity-30 hover:bg-opacity-50 transition-colors"
+                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
                 size="sm"
               >
                 {theme === "light" ? "🌙" : "☀️"}
               </TouchButton>
               <TouchButton
                 onClick={handleRestart}
-                className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded shadow transition-all"
+                className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white"
                 size="sm"
               >
-                🏠 Main Menu
+                🏠 Menu
               </TouchButton>
             </div>
           </div>
 
           {/* Game Stats */}
-          <div className="mb-4 sm:mb-6 w-full px-2">
-            <div className="flex flex-wrap gap-2 sm:gap-4 justify-center text-base sm:text-xl font-semibold">
-              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
+          <div className="w-full mb-4 sm:mb-6">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-base sm:text-lg font-semibold">
+              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
                 🏃 Moves: <b>{moves}</b>
               </div>
-              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
+              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
                 ✅ Matches: <b>{matches}/{gameConfig.pairs}</b>
               </div>
-              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent drop-shadow-md">
+              <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
                 ⏱️ Time: <b>{formatTime(timer)}</b>
               </div>
               <TouchButton
                 onClick={showHint}
                 disabled={hintCount <= 0 || flippedTiles.length > 0 || gameOver}
-                className={`rounded-full flex items-center gap-1 ${
+                className={`rounded-full ${
                   hintCount <= 0 || flippedTiles.length > 0 || gameOver
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
-                } transition-colors`}
+                }`}
                 size="sm"
               >
                 💡 Hint ({hintCount})
@@ -942,32 +921,42 @@ const MemoryTileGame = () => {
             </div>
           </div>
 
+          {/* Game Board */}
+          <div className="w-full flex-1 flex items-center justify-center">
+            <GameBoard
+              tiles={tiles}
+              difficulty={difficulty}
+              theme={theme}
+              onTileClick={handleTileClick}
+            />
+          </div>
+
           {/* Game Over Modal */}
           {gameOver && (
-            <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-10 rounded-lg backdrop-blur-sm p-4">
-              <div className={`p-6 sm:p-8 rounded-lg shadow-xl text-center max-w-md w-full ${
+            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+              <div className={`p-6 sm:p-8 rounded-2xl shadow-2xl text-center max-w-md w-full ${
                 theme === "light" ? "bg-white" : "bg-gray-800"
               }`}>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 bg-clip-text text-transparent">
                   🎉 You Win! 🎉
                 </h2>
-                <div className="space-y-2 mb-6 text-base sm:text-xl">
+                <div className="space-y-3 mb-6 text-lg">
                   <p>Completed in <b>{moves}</b> moves</p>
                   <p>Time: <b>{formatTime(timer)}</b></p>
                   <p>Difficulty: <b>{gameConfig.name}</b></p>
                   <p>Hints remaining: <b>{hintCount}</b></p>
                 </div>
-                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <TouchButton
                     onClick={handleNewGame}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all shadow"
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
                     size="md"
                   >
                     🔄 Play Again
                   </TouchButton>
                   <TouchButton
                     onClick={handleRestart}
-                    className="bg-gradient-to-r from-gray-500 to-gray-700 text-white rounded-lg hover:from-gray-600 hover:to-gray-800 transition-all shadow"
+                    className="bg-gradient-to-r from-gray-500 to-gray-700 text-white hover:from-gray-600 hover:to-gray-800"
                     size="md"
                   >
                     🏠 Main Menu
@@ -976,45 +965,6 @@ const MemoryTileGame = () => {
               </div>
             </div>
           )}
-
-          {/* Game Board */}
-          <div className="w-full flex-1 flex items-center justify-center overflow-auto">
-            <GameBoard
-              tiles={tiles}
-              difficulty={difficulty}
-              theme={theme}
-              onTileClick={handleTileClick}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div 
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
-          onClick={closeImageModal}
-        >
-          <div 
-            className="bg-white rounded-lg max-w-2xl w-full p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Image Preview</h3>
-              <TouchButton
-                onClick={closeImageModal}
-                className="text-2xl hover:text-red-500 bg-transparent"
-                size="sm"
-              >
-                &times;
-              </TouchButton>
-            </div>
-            <img 
-              src={selectedImage} 
-              alt="Full size preview" 
-              className="w-full h-auto max-h-[70vh] object-contain"
-            />
-          </div>
         </div>
       )}
     </div>
